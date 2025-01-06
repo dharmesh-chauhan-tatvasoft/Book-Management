@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">Book Store App</string>
+    <string name="book_store">Book Store</string>
+    <string name="book_list">Book list</string>
+    <string name="add_book_label">Add book</string>
+    <string name="book_name">Book Name</string>
+    <string name="author_name">Author Name</string>
+    <string name="fiction">Fiction</string>
+    <string name="non_fiction">Non-Fiction</string>
+    <string name="kids">Kids</string>
+    <string name="teens">Teens</string>
+    <string name="adults">Adults</string>
+    <string name="all_ages">All Ages</string>
+    <string name="add_book">Add Book</string>
+    <string name="romance">Romance</string>
+    <string name="thriller">Thriller</string>
+    <string name="sci_fi">Sci-Fi</string>
+    <string name="biography">Biography</string>
+    <string name="addBookNameError">Please fill book name</string>
+    <string name="addBookAuthorNameError">Please fill book author name</string>
+    <string name="addBookGenreError">Please select book genre</string>
+    <string name="addBookTypeError">Please select book type fiction or non-fiction</string>
+    <string name="addBookSuccess">Book added successfully!</string>
+    <string name="book_detail_key">BOOK_DETAIL</string>
+    <string name="book_name_label">Book Name: </string>
+    <string name="author_name_label">Author Name: </string>
+    <string name="genre_label">Genre: </string>
+    <string name="is_fiction_label">Is fiction: </string>
+    <string name="launch_date_label">Launch Date: </string>
+    <string name="age_group_label">Age Group: </string>
+</resources>
