@@ -4,6 +4,7 @@ import android.os.Parcel
 import android.os.Parcelable
 
 data class Book(
+    val bookId: Int,
     val name: String,
     val author: String,
     val genre: String,
@@ -12,6 +13,7 @@ data class Book(
     val selectedBookAgeGroup: String
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
+        parcel.readInt(),
         parcel.readString() ?: "",
         parcel.readString() ?: "",
         parcel.readString() ?: "",
@@ -21,6 +23,7 @@ data class Book(
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeInt(bookId)
         parcel.writeString(name)
         parcel.writeString(author)
         parcel.writeString(genre)
@@ -51,5 +54,12 @@ object BookDatabase {
 
     fun getBooks(): List<Book> {
         return books
+    }
+
+    fun updateBook(updateBook: Book) {
+        val index = books.indexOfFirst { it.bookId == updateBook.bookId }
+        if (index != -1) {
+            books[index] = updateBook
+        }
     }
 }

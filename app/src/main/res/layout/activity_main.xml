@@ -6,17 +6,35 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/bookStoreText"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/book_store"
-        android:textAllCaps="false"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-        android:textColor="@android:color/black"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:textSize="@dimen/text_20"/>
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+    <Button
+        android:id="@+id/addBook"
+        android:layout_width="@dimen/dimen_300"
+        android:layout_height="@dimen/dimen_60"
+        android:backgroundTint="@color/purple_500"
+        android:text="@string/add_book_label"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_18"
+        android:onClick="addBookButtonClick"/>
+
+    <Button
+        android:id="@+id/bookList"
+        android:layout_width="@dimen/dimen_300"
+        android:layout_height="@dimen/dimen_60"
+        android:backgroundTint="@color/purple_500"
+        android:text="@string/book_list"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_18"
+        android:layout_marginTop="@dimen/dimen_12"
+        android:onClick="bookListButtonClick"/>
+    </LinearLayout>
 </android.support.constraint.ConstraintLayout>

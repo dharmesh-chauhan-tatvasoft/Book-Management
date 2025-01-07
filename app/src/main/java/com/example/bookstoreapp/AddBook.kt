@@ -12,6 +12,8 @@ import android.widget.Spinner
 import android.widget.Toast
 import android.widget.DatePicker
 import android.widget.RadioButton
+import java.text.SimpleDateFormat
+import java.util.*
 
 class AddBook : AppCompatActivity() {
     private lateinit var bookNameEditText: EditText
@@ -24,6 +26,8 @@ class AddBook : AppCompatActivity() {
     private lateinit var ageGroupCheckBoxAdults : CheckBox
     private lateinit var ageGroupCheckBoxAllAges : CheckBox
     private lateinit var addBookButton: Button
+    private lateinit var book: Book
+    private var books = BookDatabase.getBooks()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_book)
@@ -31,6 +35,7 @@ class AddBook : AppCompatActivity() {
     }
 
     private fun setData() {
+        supportActionBar?.title = getString(R.string.add_book_title)
         bookNameEditText = findViewById(R.id.bookNameEditText)
         authorNameEditText = findViewById(R.id.authorNameEditText)
         genreSpinner = findViewById(R.id.genreSpinner)
@@ -52,6 +57,43 @@ class AddBook : AppCompatActivity() {
                 handleAddBookButton()
             }
         }
+
+        if (intent.hasExtra(getString(R.string.book_detail_key))) {
+            book = intent.getParcelableExtra(getString(R.string.book_detail_key))!!
+            if (book != null) {
+                setEditBookData()
+            }
+        }
+    }
+
+    private fun setEditBookData() {
+        supportActionBar?.title = getString(R.string.edit_book_title)
+        addBookButton.text = getString(R.string.edit_book)
+        bookNameEditText.setText(book.name)
+        authorNameEditText.setText(book.author)
+        val genres = arrayOf(getString(R.string.sci_fi), getString(R.string.biography), getString(R.string.romance), getString(R.string.thriller))
+        val genreIndex = genres.indexOf((book.genre))
+        if (genreIndex != -1) {
+            genreSpinner.setSelection(genreIndex)
+        }
+        for (index in 0 until fictionRadioGroup.childCount) {
+            val radioButton = fictionRadioGroup.getChildAt(index) as RadioButton
+            if (radioButton.text.toString() == book.isFiction) {
+                fictionRadioGroup.check(radioButton.id)
+                break
+            }
+        }
+        val dateFormat = SimpleDateFormat("D-M-yyyy", Locale.getDefault())
+        val selectedDate = dateFormat.parse(book.launchDate)
+
+        val calendar = Calendar.getInstance()
+        calendar.time = selectedDate
+
+        datePicker.updateDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
+        ageGroupCheckBoxKids.isChecked = book.selectedBookAgeGroup.contains(getString(R.string.kids))
+        ageGroupCheckBoxTeens.isChecked = book.selectedBookAgeGroup.contains(getString(R.string.teens))
+        ageGroupCheckBoxAdults.isChecked = book.selectedBookAgeGroup.contains(getString(R.string.adults))
+        ageGroupCheckBoxAllAges.isChecked = book.selectedBookAgeGroup.contains(getString(R.string.all_ages))
     }
 
     private fun validateBookData(): Boolean {
@@ -78,24 +120,49 @@ class AddBook : AppCompatActivity() {
         val bookType = findViewById<RadioButton>(fictionRadioGroup.checkedRadioButtonId).text.toString()
 
         val launchDate = "${datePicker.dayOfMonth}-${datePicker.month + 1}-${datePicker.year}"
-        var ageGroupType = ""
+        var ageGroupType = arrayOf<String>()
+        val mutableAgeGroupType = ageGroupType.toMutableList()
         if (ageGroupCheckBoxKids.isChecked) {
-            ageGroupType += getString(R.string.kids)
+            mutableAgeGroupType.add(getString(R.string.kids))
         }
         if (ageGroupCheckBoxTeens.isChecked) {
-            ageGroupType = ageGroupType + "," + getString(R.string.teens)
+            mutableAgeGroupType.add(getString(R.string.teens))
         }
         if (ageGroupCheckBoxAdults.isChecked) {
-            ageGroupType = ageGroupType + "," + getString(R.string.adults)
+            mutableAgeGroupType.add(getString(R.string.adults))
         }
         if (ageGroupCheckBoxAllAges.isChecked) {
-            ageGroupType = ageGroupType + "," + getString(R.string.all_ages)
+            mutableAgeGroupType.add(getString(R.string.all_ages))
         }
 
-        val newBook = Book(bookName, authorName, genre, bookType, launchDate, ageGroupType)
-        BookDatabase.addBook(newBook)
-        Toast.makeText(this, getString(R.string.addBookSuccess), Toast.LENGTH_LONG).show()
+        val selectedAgeGroupString = mutableAgeGroupType.joinToString(", ")
+        if (this::book.isInitialized && book != null) {
+            val newBook = Book(
+                book.bookId,
+                bookName,
+                authorName,
+                genre,
+                bookType,
+                launchDate,
+                selectedAgeGroupString
+            )
+            BookDatabase.updateBook(newBook)
+            Toast.makeText(this, getString(R.string.updateBookSuccess), Toast.LENGTH_SHORT).show()
+        } else {
+            val newBook = Book(
+                books.size + 1,
+                bookName,
+                authorName,
+                genre,
+                bookType,
+                launchDate,
+                selectedAgeGroupString
+            )
+            BookDatabase.addBook(newBook)
+            Toast.makeText(this, getString(R.string.addBookSuccess), Toast.LENGTH_SHORT).show()
+        }
         val navigateToBookList = Intent(this, BookList::class.java)
+        navigateToBookList.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
         startActivity(navigateToBookList)
         finish()
     }

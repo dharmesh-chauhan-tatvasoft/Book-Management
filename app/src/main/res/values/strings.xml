@@ -21,6 +21,7 @@
     <string name="addBookGenreError">Please select book genre</string>
     <string name="addBookTypeError">Please select book type fiction or non-fiction</string>
     <string name="addBookSuccess">Book added successfully!</string>
+    <string name="updateBookSuccess">Book updated successfully!</string>
     <string name="book_detail_key">BOOK_DETAIL</string>
     <string name="book_name_label">Book Name: </string>
     <string name="author_name_label">Author Name: </string>
@@ -28,4 +29,9 @@
     <string name="is_fiction_label">Is fiction: </string>
     <string name="launch_date_label">Launch Date: </string>
     <string name="age_group_label">Age Group: </string>
+    <string name="edit_book">Edit book</string>
+    <string name="add_book_title">Add Book</string>
+    <string name="edit_book_title">Edit Book</string>
+    <string name="book_list_title">Book List</string>
+    <string name="book_detail_title">Book Detail</string>
 </resources>

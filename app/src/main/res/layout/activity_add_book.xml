@@ -97,6 +97,9 @@
                     android:id="@+id/addBookButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:backgroundTint="@color/purple_500"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_14"
                     android:text="@string/add_book"
                     android:layout_marginTop="@dimen/dimen_16" />
         </LinearLayout>

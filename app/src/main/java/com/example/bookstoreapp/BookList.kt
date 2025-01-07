@@ -19,6 +19,7 @@ class BookList: AppCompatActivity() {
     }
 
     private fun handleAdapter() {
+        supportActionBar?.title = getString(R.string.book_list_title)
         recyclerList = findViewById(R.id.bookListRecyclerView)
         bookListAdapter = BookListAdapter(books) { book ->
             val navigateToBookDetail = Intent(this, BookDetail::class.java).apply {
