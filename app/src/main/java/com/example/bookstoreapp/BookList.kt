@@ -23,7 +23,7 @@ class BookList: AppCompatActivity() {
         recyclerList = findViewById(R.id.bookListRecyclerView)
         bookListAdapter = BookListAdapter(books) { book ->
             val navigateToBookDetail = Intent(this, BookDetail::class.java).apply {
-                putExtra(getString(R.string.book_detail_key), book)
+                putExtra(Constants.BOOK_DETAIL, book)
             }
             startActivity(navigateToBookDetail)
         }

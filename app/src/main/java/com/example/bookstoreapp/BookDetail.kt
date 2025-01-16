@@ -8,7 +8,7 @@ import android.view.MenuItem
 import android.widget.TextView
 
 class BookDetail : AppCompatActivity() {
-    private lateinit var book: Book
+    private var book: Book? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,7 +18,7 @@ class BookDetail : AppCompatActivity() {
 
     private fun setBookDetailData() {
         supportActionBar?.title = getString(R.string.book_detail_title)
-        book = intent.getParcelableExtra(getString(R.string.book_detail_key))!!
+        book = intent.getParcelableExtra(Constants.BOOK_DETAIL)
 
         val bookNameTextView: TextView = findViewById(R.id.textViewBookName)
         val authorNameTextView: TextView = findViewById(R.id.textViewAuthorName)
@@ -27,12 +27,12 @@ class BookDetail : AppCompatActivity() {
         val launchDateTextView: TextView = findViewById(R.id.textViewLaunchDate)
         val ageGroupTextView: TextView = findViewById(R.id.textViewAgeGroup)
 
-        bookNameTextView.text = book.name
-        authorNameTextView.text = book.author
-        genreTextView.text = book.genre
-        fictionTextView.text = if(book.isFiction == "Fiction") "Yes" else "No"
-        launchDateTextView.text = book.launchDate
-        ageGroupTextView.text = if(book.selectedBookAgeGroup != "") book.selectedBookAgeGroup else "N/A"
+        bookNameTextView.text = book?.name
+        authorNameTextView.text = book?.author
+        genreTextView.text = book?.genre
+        fictionTextView.text = if(book?.isFiction == Constants.FICTION) getString(R.string.yes) else getString(R.string.no)
+        launchDateTextView.text = book?.launchDate
+        ageGroupTextView.text = if(book?.selectedBookAgeGroup != "") book?.selectedBookAgeGroup else getString(R.string.not_available)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -42,7 +42,7 @@ class BookDetail : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val editBookNavigation = Intent(this, AddBook::class.java).apply {
-            putExtra(getString(R.string.book_detail_key), book)
+            putExtra(Constants.BOOK_DETAIL, book)
         }
         startActivity(editBookNavigation)
         finish()

@@ -5,13 +5,25 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
+import android.widget.Button
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         supportActionBar?.title = getString(R.string.book_store)
+        handleButtonListener()
+    }
+
+    private fun handleButtonListener() {
+        val addBook: Button = findViewById(R.id.addBook)
+        val bookList: Button = findViewById(R.id.bookList)
+        addBook.setOnClickListener {
+            navigationToAddBook()
+        }
+        bookList.setOnClickListener {
+            navigationToBookList()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -40,13 +52,5 @@ class MainActivity : AppCompatActivity() {
     private fun navigationToAddBook() {
         val intentForAddBook = Intent(this, AddBook::class.java)
         startActivity(intentForAddBook)
-    }
-
-    fun addBookButtonClick(view: View) {
-        navigationToAddBook()
-    }
-
-    fun bookListButtonClick(view: View) {
-        navigationToBookList()
     }
 }

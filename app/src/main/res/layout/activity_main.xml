@@ -6,16 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center_horizontal"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent">
-
     <Button
         android:id="@+id/addBook"
         android:layout_width="@dimen/dimen_300"
@@ -24,6 +14,10 @@
         android:text="@string/add_book_label"
         android:textColor="@color/white"
         android:textSize="@dimen/text_18"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         android:onClick="addBookButtonClick"/>
 
     <Button
@@ -35,6 +29,8 @@
         android:textColor="@color/white"
         android:textSize="@dimen/text_18"
         android:layout_marginTop="@dimen/dimen_12"
+        app:layout_constraintTop_toBottomOf="@+id/addBook"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         android:onClick="bookListButtonClick"/>
-    </LinearLayout>
 </android.support.constraint.ConstraintLayout>

@@ -26,7 +26,7 @@ class AddBook : AppCompatActivity() {
     private lateinit var ageGroupCheckBoxAdults : CheckBox
     private lateinit var ageGroupCheckBoxAllAges : CheckBox
     private lateinit var addBookButton: Button
-    private lateinit var book: Book
+    private var book: Book? = null
     private var books = BookDatabase.getBooks()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,8 +58,8 @@ class AddBook : AppCompatActivity() {
             }
         }
 
-        if (intent.hasExtra(getString(R.string.book_detail_key))) {
-            book = intent.getParcelableExtra(getString(R.string.book_detail_key))!!
+        if (intent.hasExtra(Constants.BOOK_DETAIL)) {
+            book = intent.getParcelableExtra(Constants.BOOK_DETAIL)
             if (book != null) {
                 setEditBookData()
             }
@@ -69,31 +69,34 @@ class AddBook : AppCompatActivity() {
     private fun setEditBookData() {
         supportActionBar?.title = getString(R.string.edit_book_title)
         addBookButton.text = getString(R.string.edit_book)
-        bookNameEditText.setText(book.name)
-        authorNameEditText.setText(book.author)
+        bookNameEditText.setText(book?.name ?: "")
+        authorNameEditText.setText(book?.author ?: "")
         val genres = arrayOf(getString(R.string.sci_fi), getString(R.string.biography), getString(R.string.romance), getString(R.string.thriller))
-        val genreIndex = genres.indexOf((book.genre))
+        val genreIndex = genres.indexOf((book?.genre))
         if (genreIndex != -1) {
             genreSpinner.setSelection(genreIndex)
         }
         for (index in 0 until fictionRadioGroup.childCount) {
             val radioButton = fictionRadioGroup.getChildAt(index) as RadioButton
-            if (radioButton.text.toString() == book.isFiction) {
+            if (radioButton.text.toString() == book?.isFiction) {
                 fictionRadioGroup.check(radioButton.id)
                 break
             }
         }
-        val dateFormat = SimpleDateFormat("D-M-yyyy", Locale.getDefault())
-        val selectedDate = dateFormat.parse(book.launchDate)
+        val dateFormat = SimpleDateFormat(Constants.DATE_FORMAT, Locale.getDefault())
+        val selectedDate = dateFormat.parse(book?.launchDate ?: "")
 
         val calendar = Calendar.getInstance()
-        calendar.time = selectedDate
+        if (selectedDate != null) {
+            calendar.time = selectedDate
+        }
 
         datePicker.updateDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
-        ageGroupCheckBoxKids.isChecked = book.selectedBookAgeGroup.contains(getString(R.string.kids))
-        ageGroupCheckBoxTeens.isChecked = book.selectedBookAgeGroup.contains(getString(R.string.teens))
-        ageGroupCheckBoxAdults.isChecked = book.selectedBookAgeGroup.contains(getString(R.string.adults))
-        ageGroupCheckBoxAllAges.isChecked = book.selectedBookAgeGroup.contains(getString(R.string.all_ages))
+        ageGroupCheckBoxKids.isChecked =
+            book?.selectedBookAgeGroup?.contains(getString(R.string.kids)) ?: false
+        ageGroupCheckBoxTeens.isChecked = book?.selectedBookAgeGroup?.contains(getString(R.string.teens)) ?: false
+        ageGroupCheckBoxAdults.isChecked = book?.selectedBookAgeGroup?.contains(getString(R.string.adults)) ?: false
+        ageGroupCheckBoxAllAges.isChecked = book?.selectedBookAgeGroup?.contains(getString(R.string.all_ages)) ?: false
     }
 
     private fun validateBookData(): Boolean {
@@ -120,7 +123,7 @@ class AddBook : AppCompatActivity() {
         val bookType = findViewById<RadioButton>(fictionRadioGroup.checkedRadioButtonId).text.toString()
 
         val launchDate = "${datePicker.dayOfMonth}-${datePicker.month + 1}-${datePicker.year}"
-        var ageGroupType = arrayOf<String>()
+        val ageGroupType = arrayOf<String>()
         val mutableAgeGroupType = ageGroupType.toMutableList()
         if (ageGroupCheckBoxKids.isChecked) {
             mutableAgeGroupType.add(getString(R.string.kids))
@@ -136,9 +139,9 @@ class AddBook : AppCompatActivity() {
         }
 
         val selectedAgeGroupString = mutableAgeGroupType.joinToString(", ")
-        if (this::book.isInitialized && book != null) {
+        if (book != null) {
             val newBook = Book(
-                book.bookId,
+                book?.bookId ?: 1,
                 bookName,
                 authorName,
                 genre,
